@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>One Place — Parent Dashboard (Prototype)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="greeting">
+        <div>
+          <div class="hello">Parent Dashboard — Jamie</div>
+          <div class="date">Manage activities & occurrences</div>
+        </div>
+        <div class="avatar">👩</div>
+      </div>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>Child Profile</h2>
+        <div class="form-row"><label>Name<br/><input id="childNameInput" type="text" placeholder="Jamie"></label></div>
+        <div class="form-row"><label>Date of birth<br/><input id="childDOB" type="date"></label></div>
+        <div class="form-row"><label>Things that help<br/><textarea id="strategies" rows="3" placeholder="Quiet corner, visual timetable, extra time"></textarea></label></div>
+        <div style="margin-top:8px"><button id="saveProfile" class="help-btn">Save Profile</button></div>
+      </section>
+      <section class="card">
+        <h2>Add Activity</h2>
+        <div class="form-row"><label>Title<br/><input id="title" type="text" placeholder="Football training"></label></div>
+        <div class="form-row"><label>Date<br/><input id="date" type="date"></label></div>
+        <div class="form-row"><label>Time<br/><input id="time" type="time"></label></div>
+        <div class="form-row"><label>Location<br/><input id="location" type="text" placeholder="Riverside Sports Centre"></label></div>
+        <div class="form-row"><label>Notes<br/><input id="notes" type="text" placeholder="Bring water bottle"></label></div>
+        <div style="margin-top:8px"><button id="addActivity" class="help-btn">Add Activity</button></div>
+      </section>
+
+      <section class="card">
+        <h2>Upcoming Activities</h2>
+        <div id="eventsList"></div>
+      </section>
+
+      <section class="card">
+        <h2>Record Occurrence</h2>
+        <div class="form-row"><label>What happened before?<br/><input id="before" type="text"></label></div>
+        <div class="form-row"><label>What happened?<br/><input id="happened" type="text"></label></div>
+        <div class="form-row"><label>What helped?<br/><input id="helped" type="text"></label></div>
+        <div style="margin-top:8px"><button id="recordOcc" class="help-btn">Save Occurrence</button></div>
+      </section>
+
+      <section class="card">
+        <h2>Saved Occurrences</h2>
+        <div id="occList"></div>
+      </section>
+
+      <section class="card">
+        <h2>Support Passport (preview)</h2>
+        <div style="margin-bottom:8px">
+          <button id="previewPassport" class="help-btn">Preview Passport</button>
+          <button id="downloadPassport" class="help-btn">Download PDF</button>
+        </div>
+        <div id="passportPreview" style="color:#666">No preview yet.</div>
+      </section>
+
+      <p style="color:#666;font-size:13px">Tip: These items are saved to your browser storage and will appear in the child prototype if opened on the same device/browser.</p>
+
+    </main>
+
+    <nav class="bottom-nav">
+      <a class="nav-item" href="index.html">Child view</a>
+      <a class="nav-item" href="myweek.html">My Week</a>
+      <a class="nav-item" href="helpme.html">Help</a>
+      <a class="nav-item" href="travel.html">Travel</a>
+      <a class="nav-item active" href="parent-dashboard.html">Parent</a>
+    </nav>
+  </div>
+
+  <script>
+    function loadEvents(){
+      const raw = localStorage.getItem('oneplace_events');
+      try{
+        return raw ? JSON.parse(raw) : [];
+      }catch(e){return []}
+    }
+    function saveEvents(ev){
+      localStorage.setItem('oneplace_events', JSON.stringify(ev));
+    }
+
+    function renderEvents(){
+      const list = document.getElementById('eventsList');
+      const events = loadEvents();
+      if(events.length===0){ list.innerHTML = '<div style="color:#666">No activities yet.</div>'; return; }
+      list.innerHTML = '';
+      events.forEach((e,idx)=>{
+        const div = document.createElement('div');
+        div.className = 'event';
+        const time = document.createElement('div'); time.className='time'; time.textContent = e.time || '';
+        const meta = document.createElement('div'); meta.className='meta'; meta.textContent = (e.title||'') + (e.location? ' — '+e.location : '');
+        const controls = document.createElement('div'); controls.style.marginLeft='8px';
+        // Share toggle
+        const share = document.createElement('label'); share.style.marginLeft='8px';
+        const chk = document.createElement('input'); chk.type='checkbox'; chk.checked = !!e.shareWithSchool; chk.addEventListener('change', ()=>{ e.shareWithSchool = chk.checked; saveEvents(events); renderPassportPreview(); });
+        share.appendChild(chk); share.appendChild(document.createTextNode(' Share with school'));
+        // Edit button
+        const edit = document.createElement('button'); edit.textContent='Edit'; edit.style.marginLeft='8px'; edit.addEventListener('click', ()=>{
+          const newTitle = prompt('Title', e.title) || e.title;
+          const newDate = prompt('Date (YYYY-MM-DD)', e.date) || e.date;
+          const newTime = prompt('Time (HH:MM)', e.time) || e.time;
+          const newLoc = prompt('Location', e.location) || e.location;
+          e.title = newTitle; e.date = newDate; e.time = newTime; e.location = newLoc; saveEvents(events); renderEvents(); renderPassportPreview();
+        });
+        const del = document.createElement('button'); del.textContent='Delete'; del.style.marginLeft='8px';
+        del.addEventListener('click', ()=>{ if(confirm('Delete this activity?')){ events.splice(idx,1); saveEvents(events); renderEvents(); renderPassportPreview(); } });
+        controls.appendChild(edit); controls.appendChild(del); controls.appendChild(share);
+        div.appendChild(time); div.appendChild(meta); div.appendChild(controls);
+        list.appendChild(div);
+      });
+    }
+
+    document.getElementById('addActivity').addEventListener('click', ()=>{
+      const title = document.getElementById('title').value;
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+      const location = document.getElementById('location').value;
+      const notes = document.getElementById('notes').value;
+      if(!title||!date||!time){ alert('Please fill Title, Date and Time'); return; }
+      const events = loadEvents();
+      events.push({ id: 'ev_'+Date.now(), childId: 'child_jamie', title, date, time, location, notes, createdBy:'parent', completed:false });
+      saveEvents(events); renderEvents();
+      alert('Activity added and saved. Open the Child view to see it.');
+      // clear form
+      document.getElementById('title').value=''; document.getElementById('date').value=''; document.getElementById('time').value=''; document.getElementById('location').value=''; document.getElementById('notes').value='';
+    });
+
+    // Occurrences
+    function loadOcc(){const raw = localStorage.getItem('oneplace_occurrences'); try{return raw?JSON.parse(raw):[];}catch(e){return []}}
+    function saveOcc(o){localStorage.setItem('oneplace_occurrences', JSON.stringify(o));}
+    function renderOcc(){const list = document.getElementById('occList'); const occ = loadOcc(); if(occ.length===0){list.innerHTML='<div style="color:#666">No occurrences recorded.</div>'; return;} list.innerHTML=''; occ.forEach((o,idx)=>{const d=document.createElement('div'); d.className='event'; d.innerHTML='<div class="time">'+new Date(o.timestamp).toLocaleString()+'</div><div class="meta">'+o.happened+'</div>'; const del=document.createElement('button'); del.textContent='Delete'; del.style.marginLeft='8px'; del.addEventListener('click', ()=>{ occ.splice(idx,1); saveOcc(occ); renderOcc(); }); d.appendChild(del); list.appendChild(d); })}
+
+    document.getElementById('recordOcc').addEventListener('click', ()=>{
+      const before = document.getElementById('before').value;
+      const happened = document.getElementById('happened').value;
+      const helped = document.getElementById('helped').value;
+      if(!happened){alert('Please describe what happened'); return;}
+      const occ = loadOcc(); occ.push({ id:'oc_'+Date.now(), childId:'child_jamie', timestamp:Date.now(), before, happened, helped, recordedBy:'parent' }); saveOcc(occ); renderOcc(); alert('Occurrence saved.'); document.getElementById('before').value=''; document.getElementById('happened').value=''; document.getElementById('helped').value='';
+    });
+
+    renderEvents(); renderOcc();
+
+    // Support Passport preview + download
+    function renderPassportPreview(){
+      const preview = document.getElementById('passportPreview');
+      const child = localStorage.getItem('oneplace_childName') || localStorage.getItem('oneplace_childName_input') || 'Jamie';
+      const dob = localStorage.getItem('oneplace_childDOB') || '';
+      const strategies = localStorage.getItem('oneplace_strategies') || '';
+      const events = loadEvents().filter(e=>e.shareWithSchool);
+      const occ = loadOcc();
+      if(events.length===0 && occ.length===0){ preview.textContent = 'No shared information yet.'; return; }
+      let html = '';
+      html += child + (dob? (' — DOB: '+dob) : '') + '\n\n';
+      if(strategies){ html += 'Things that help: '+strategies+'\n\n'; }
+      if(events.length){ html += 'Shared activities:\n'; events.forEach(ev=>{ html += '- '+(ev.title||'')+' '+(ev.date||'')+' '+(ev.time||'')+' ('+(ev.location||'')+')\n'; }); html += '\n'; }
+      if(occ.length){ html += 'Recent occurrences:\n'; occ.slice(-5).forEach(o=>{ html += '- '+new Date(o.timestamp).toLocaleString()+': '+o.happened+'\n'; }); }
+      preview.textContent = html;
+    }
+
+    document.getElementById('previewPassport').addEventListener('click', ()=>{
+      renderPassportPreview();
+      alert('Preview updated below. Use Download PDF to open a printable passport.');
+    });
+
+    document.getElementById('downloadPassport').addEventListener('click', ()=>{
+      const child = localStorage.getItem('oneplace_childName') || localStorage.getItem('oneplace_childName_input') || 'Jamie';
+      const dob = localStorage.getItem('oneplace_childDOB') || '';
+      const strategies = localStorage.getItem('oneplace_strategies') || '';
+      const events = loadEvents().filter(e=>e.shareWithSchool);
+      const occ = loadOcc();
+      const win = window.open('', '_blank');
+      const doc = win.document;
+      doc.write('<!doctype html><html><head><title>Support Passport - '+child+'</title><style>body{font-family:Arial,Helvetica,sans-serif;padding:20px;background:#fff6fb}h1{color:#d63384} .section{margin-bottom:12px} .meta{color:#666}</style></head><body>');
+      doc.write('<h1>Support Passport — '+child+'</h1>');
+      if(dob) doc.write('<div class="meta">DOB: '+dob+'</div>');
+      if(strategies) doc.write('<div class="meta">Things that help: '+strategies+'</div>');
+      doc.write('<hr/>');
+      doc.write('<div class="section"><h3>Shared activities</h3>');
+      if(events.length){ doc.write('<ul>'); events.forEach(ev=>{ doc.write('<li>'+(ev.title||'')+' — '+(ev.date||'')+' '+(ev.time||'')+' ('+(ev.location||'')+')</li>'); }); doc.write('</ul>'); } else { doc.write('<div>No shared activities</div>'); }
+      doc.write('</div>');
+      doc.write('<div class="section"><h3>Recent occurrences</h3>');
+      if(occ.length){ doc.write('<ul>'); occ.slice(-10).forEach(o=>{ doc.write('<li>'+new Date(o.timestamp).toLocaleString()+': '+(o.happened||'')+'</li>'); }); doc.write('</ul>'); } else { doc.write('<div>No occurrences recorded</div>'); }
+      doc.write('</div>');
+      doc.write('<div style="margin-top:24px;color:#666">Generated from One Place prototype</div>');
+      doc.write('</body></html>');
+      doc.close();
+      win.print();
+    });
+
+    // initial passport preview
+    renderPassportPreview();
+
+    // Profile: load/save
+    const nameInput = document.getElementById('childNameInput');
+    const dobInput = document.getElementById('childDOB');
+    const strategiesInput = document.getElementById('strategies');
+    // load existing
+    const savedName = localStorage.getItem('oneplace_childName'); if(savedName) nameInput.value = savedName;
+    const savedDOB = localStorage.getItem('oneplace_childDOB'); if(savedDOB) dobInput.value = savedDOB;
+    const savedStrat = localStorage.getItem('oneplace_strategies'); if(savedStrat) strategiesInput.value = savedStrat;
+    document.getElementById('saveProfile').addEventListener('click', ()=>{
+      const n = nameInput.value || 'Jamie';
+      localStorage.setItem('oneplace_childName', n);
+      localStorage.setItem('oneplace_childDOB', dobInput.value || '');
+      localStorage.setItem('oneplace_strategies', strategiesInput.value || '');
+      alert('Profile saved. Passport preview will include these details.');
+      renderPassportPreview();
+    });
+  </script>
+</body>
+</html>

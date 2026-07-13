@@ -1,0 +1,42 @@
+:root{
+	--bg: #fff6fb; /* very pale pink background */
+	--card: #ffffff;
+	--text: #2b2b2b;
+	--muted: #7a6b7a;
+	--accent: #ff6b9a; /* bright pink */
+	--accent-soft: #ffd8e6; /* soft pink */
+	--accent-2: #f6e6f2; /* pastel lavender */
+	--shadow: rgba(43,27,36,0.06);
+}
+
+*{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
+body{margin:0;background:var(--bg);color:var(--text)}
+.app{max-width:420px;margin:18px auto;border-radius:12px;padding-bottom:72px}
+.header{padding:16px}
+.greeting{display:flex;justify-content:space-between;align-items:center}
+.hello{font-size:18px;font-weight:600}
+.date{font-size:13px;color:var(--muted)}
+.avatar{font-size:28px}
+main{padding:0 16px}
+.card{background:var(--card);border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 4px 14px var(--shadow)}
+.now-card h2{margin:0 0 8px 0}
+.now-title{font-size:16px;font-weight:600;margin-bottom:8px;color:var(--text)}
+.micro-tasks{list-style:none;padding:0;margin:0}
+.micro-tasks li{padding:6px 0;border-top:1px solid #f6ecf3}
+.micro-tasks li:first-child{border-top:0}
+.next-card .transport{display:flex;justify-content:space-between;align-items:center}
+.route{font-weight:700}
+.when{font-size:13px;color:var(--muted)}
+.eta{background:var(--accent-soft);padding:6px 8px;border-radius:10px;font-weight:600;color:#6b2540}
+.eta.due{background:#fff4e6;color:#b2462f}
+.link-btn{background:none;border:none;color:var(--accent);padding:8px 0;font-weight:700}
+.later-list .event{display:flex;gap:12px;padding:8px 0;border-top:1px dashed #f3e9ef}
+.later-list .event:first-child{border-top:0}
+.time{width:80px;font-weight:700}
+.meta{color:#555}
+.help-me{text-align:center}
+.help-btn{background:linear-gradient(180deg,var(--accent-soft),var(--accent-2));border:none;padding:12px 18px;border-radius:12px;font-weight:700;color:var(--text)}
+.bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:rgba(255,255,255,0.95);display:flex;gap:8px;padding:8px;border-radius:40px;box-shadow:0 10px 30px rgba(0,0,0,0.08)}
+.nav-item{background:none;border:none;padding:8px 12px;border-radius:12px;color:var(--muted);text-decoration:none}
+.nav-item.active{background:var(--accent-soft);font-weight:700;color:var(--text)}
+@media (max-width:480px){.app{margin:0;border-radius:0}}

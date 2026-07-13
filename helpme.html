@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>One Place — Help Me (Prototype)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="greeting">
+        <div>
+          <div class="hello">Help Me — Jamie ❤️</div>
+          <div class="date" id="dateLine"></div>
+        </div>
+        <div class="avatar">🧸</div>
+      </div>
+    </header>
+
+    <main>
+      <section class="help-card card">
+        <h2>What do you need right now?</h2>
+        <div class="help-options">
+          <button class="help-option">Everything feels too much</button>
+          <button class="help-option">I'm angry</button>
+          <button class="help-option">I'm worried</button>
+          <button class="help-option">I don't know what to do</button>
+          <button class="help-option">I need some quiet</button>
+        </div>
+      </section>
+
+      <section class="suggestions card">
+        <h3>Try this</h3>
+        <div class="suggest">Take 3 deep breaths</div>
+        <div class="suggest">Find a quiet place</div>
+        <div class="suggest">Play calming music</div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <a class="nav-item" href="index.html">Today</a>
+      <a class="nav-item" href="myweek.html">My Week</a>
+      <a class="nav-item" href="index.html">School</a>
+      <a class="nav-item" href="travel.html">Travel</a>
+      <button class="nav-item active">Help</button>
+    </nav>
+  </div>
+
+  <script>
+    document.querySelectorAll('.help-option').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        alert('Logged: ' + btn.textContent + '. This would be saved and parents notified in the real app.');
+      });
+    });
+  </script>
+</body>
+</html>
