@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#ffd8e6" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="One Place" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon-192.svg" />
+  <link rel="apple-touch-icon" href="icon-192.svg" />
+  <title>One Place — Parent Login</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .login-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      background: linear-gradient(135deg, #ffd8e6 0%, #fff6fb 100%);
+    }
+    .login-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+      max-width: 380px;
+      width: 100%;
+    }
+    .logo-center {
+      font-size: 60px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .login-card h1 {
+      text-align: center;
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    .login-card .subtitle {
+      text-align: center;
+      color: #999;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      color: #333;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #eee;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #ffd8e6;
+      background: #fffbfd;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #ff69b4 0%, #ffd8e6 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .login-btn:active {
+      transform: scale(0.98);
+    }
+    .demo-note {
+      text-align: center;
+      color: #999;
+      font-size: 12px;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+    .demo-note strong {
+      color: #ff69b4;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="logo-center">👩‍👧‍👦</div>
+      <h1>One Place</h1>
+      <p class="subtitle">Parent Portal</p>
+      
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="parent@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="childName">Child's Name</label>
+          <input type="text" id="childName" placeholder="e.g., Jamie" required />
+        </div>
+        <button type="submit" class="login-btn">Enter Parent Dashboard</button>
+      </form>
+      
+      <div class="demo-note">
+        <strong>Demo mode:</strong> No password needed—just test the flow
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const childName = document.getElementById('childName').value;
+      
+      localStorage.setItem('oneplace_parentEmail', email);
+      localStorage.setItem('oneplace_childName', childName);
+      localStorage.setItem('oneplace_loggedIn', 'parent');
+      
+      window.location.href = 'parent-dashboard.html';
+    });
+  </script>
+</body>
+</html>
