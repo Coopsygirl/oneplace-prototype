@@ -1,0 +1,21 @@
+{
+  "name": "One Place",
+  "short_name": "OnePlace",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fff6fb",
+  "theme_color": "#ffd8e6",
+  "description": "A calm schedule and support app for children and parents.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

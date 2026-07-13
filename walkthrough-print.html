@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>One Place — Walkthrough Print</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;padding:18px;background:#fff6fb;color:#2b2b2b}
+    .page{page-break-after:always;margin-bottom:24px}
+    h1{color:#d63384}
+    .frame{border:1px solid #f0dfe6;border-radius:8px;overflow:hidden;height:520px;width:360px}
+    .row{display:flex;gap:16px;align-items:flex-start}
+    .caption{max-width:380px}
+    .meta{color:#6b6b6b;font-size:13px}
+    iframe{width:100%;height:100%;border:0}
+  </style>
+</head>
+<body>
+  <h1>One Place — Prototype Walkthrough</h1>
+  <p class="meta">This PDF contains live-rendered pages from the local prototype. Each page is shown with a short caption describing what to demo.</p>
+
+  <div class="page">
+    <h2>Child — Today</h2>
+    <div class="row">
+      <div class="frame"><iframe src="index.html"></iframe></div>
+      <div class="caption"><strong>What to show:</strong>
+        <ul>
+          <li>Now card with micro-tasks (checkbox)</li>
+          <li>Next transport card with ETA</li>
+          <li>Later list for scheduled activities</li>
+          <li>Help Me quick access</li>
+        </ul>
+        <div class="meta">Tip: refresh to see parent-added activities.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <h2>Child — My Week</h2>
+    <div class="row">
+      <div class="frame"><iframe src="myweek.html"></iframe></div>
+      <div class="caption"><strong>What to show:</strong>
+        <ul>
+          <li>Week overview with day blocks</li>
+          <li>Tap a day to view details</li>
+        </ul>
+        <div class="meta">Good to demonstrate weekly structure at a glance.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <h2>Child — Help Me</h2>
+    <div class="row">
+      <div class="frame"><iframe src="helpme.html"></iframe></div>
+      <div class="caption"><strong>What to show:</strong>
+        <ul>
+          <li>Quick feelings buttons (Everything feels too much, I'm angry, etc.)</li>
+          <li>Immediate calming suggestions</li>
+        </ul>
+        <div class="meta">Selecting a feeling logs an occurrence the parent can view.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <h2>Child — Travel / My Bus</h2>
+    <div class="row">
+      <div class="frame"><iframe src="travel.html"></iframe></div>
+      <div class="caption"><strong>What to show:</strong>
+        <ul>
+          <li>Next bus time and status</li>
+          <li>Map placeholder and travel tips</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <h2>Parent — Dashboard</h2>
+    <div class="row">
+      <div class="frame"><iframe src="parent-dashboard.html"></iframe></div>
+      <div class="caption"><strong>What to show:</strong>
+        <ul>
+          <li>Add Activity (Title, Date, Time, Location)</li>
+          <li>Record Occurrence</li>
+          <li>Child Profile (Name, DOB, Strategies)</li>
+          <li>Support Passport preview + Download PDF</li>
+        </ul>
+        <div class="meta">Use this view when demonstrating to parents or schools.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="page-break-after:always"></div>
+</body>
+</html>
