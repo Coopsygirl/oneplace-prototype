@@ -10,56 +10,121 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icon-192.svg" />
   <link rel="apple-touch-icon" href="icon-192.svg" />
-  <title>One Place — Help Me (Prototype)</title>
+  <title>One Place — Help Me</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .help-screen { min-height: 100vh; padding-bottom: 100px; }
+    .help-header { background: linear-gradient(135deg, #ff69b4 0%, #ffd8e6 100%); color: white; padding: 30px 20px; text-align: center; }
+    .help-header h1 { font-size: 28px; margin-bottom: 10px; }
+    .help-header p { font-size: 14px; opacity: 0.9; }
+    .feeling-label { text-align: center; color: #999; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; margin: 25px 20px 15px; font-weight: 600; }
+    .feeling-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 20px; margin-bottom: 30px; }
+    .feeling-btn { background: white; border: 2px solid #eee; border-radius: 15px; padding: 20px; cursor: pointer; text-align: center; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .feeling-btn:active { transform: scale(0.95); }
+    .feeling-btn.selected { border-color: #ff69b4; background: #fff0f7; box-shadow: 0 4px 12px rgba(255,105,180,0.2); }
+    .feeling-emoji { font-size: 36px; margin-bottom: 8px; display: block; }
+    .feeling-label-btn { font-size: 14px; font-weight: 600; color: #333; }
+    .messaging-section { display: none; padding: 20px; }
+    .messaging-section.active { display: block; }
+    .message-prompt { color: #666; font-size: 14px; margin-bottom: 15px; }
+    .message-input { width: 100%; min-height: 100px; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; font-size: 14px; resize: vertical; }
+    .message-input:focus { outline: none; border-color: #ff69b4; background: #fffbfd; }
+    .action-buttons { display: flex; gap: 10px; margin-top: 15px; }
+    .action-buttons button { flex: 1; padding: 12px; border: none; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; transition: transform 0.1s; }
+    .action-buttons button:active { transform: scale(0.95); }
+    .send-btn { background: linear-gradient(135deg, #ff69b4 0%, #ffd8e6 100%); color: white; }
+    .cancel-btn { background: #eee; color: #333; }
+    .suggestions { background: #f5f5f5; border-radius: 10px; padding: 15px; margin: 20px; }
+    .suggestions h3 { font-size: 14px; color: #333; margin-bottom: 12px; font-weight: 600; }
+    .suggestion-item { background: white; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #666; border-left: 3px solid #ffd8e6; }
+    .success-state { display: none; text-align: center; padding: 40px 20px; }
+    .success-state.active { display: block; }
+    .success-icon { font-size: 60px; margin-bottom: 15px; }
+    .success-state h2 { color: #333; margin-bottom: 8px; font-size: 20px; }
+    .success-state p { color: #666; font-size: 14px; margin-bottom: 20px; }
+    .back-btn { background: #ff69b4; color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px; }
+  </style>
 </head>
 <body>
   <div class="app">
-    <header class="header">
-      <div class="greeting">
-        <div>
-          <div class="hello">Help Me — Jamie ❤️</div>
-          <div class="date" id="dateLine"></div>
-        </div>
-        <div class="avatar">🧸</div>
+    <div class="help-screen">
+      <div class="help-header">
+        <h1>How Are You Feeling?</h1>
+        <p>Tell your parent if you need support</p>
       </div>
-    </header>
-
-    <main>
-      <section class="help-card card">
-        <h2>What do you need right now?</h2>
-        <div class="help-options">
-          <button class="help-option">Everything feels too much</button>
-          <button class="help-option">I'm angry</button>
-          <button class="help-option">I'm worried</button>
-          <button class="help-option">I don't know what to do</button>
-          <button class="help-option">I need some quiet</button>
+      <div id="feelingSelection">
+        <div class="feeling-label">What's happening right now?</div>
+        <div class="feeling-grid">
+          <button class="feeling-btn" data-feeling="😭 Overwhelmed"><span class="feeling-emoji">😭</span><div class="feeling-label-btn">Overwhelmed</div></button>
+          <button class="feeling-btn" data-feeling="😠 Angry"><span class="feeling-emoji">😠</span><div class="feeling-label-btn">Angry</div></button>
+          <button class="feeling-btn" data-feeling="😰 Worried"><span class="feeling-emoji">😰</span><div class="feeling-label-btn">Worried</div></button>
+          <button class="feeling-btn" data-feeling="😕 Confused"><span class="feeling-emoji">😕</span><div class="feeling-label-btn">Confused</div></button>
+          <button class="feeling-btn" data-feeling="😴 Tired"><span class="feeling-emoji">😴</span><div class="feeling-label-btn">Tired</div></button>
+          <button class="feeling-btn" data-feeling="😊 Happy"><span class="feeling-emoji">😊</span><div class="feeling-label-btn">Happy</div></button>
+          <button class="feeling-btn" data-feeling="😔 Sad"><span class="feeling-emoji">😔</span><div class="feeling-label-btn">Sad</div></button>
+          <button class="feeling-btn" data-feeling="🤔 Thinking"><span class="feeling-emoji">🤔</span><div class="feeling-label-btn">Thinking</div></button>
         </div>
-      </section>
-
-      <section class="suggestions card">
-        <h3>Try this</h3>
-        <div class="suggest">Take 3 deep breaths</div>
-        <div class="suggest">Find a quiet place</div>
-        <div class="suggest">Play calming music</div>
-      </section>
-    </main>
-
+      </div>
+      <div id="messagingSection" class="messaging-section">
+        <div class="message-prompt" id="messagingPrompt"></div>
+        <textarea class="message-input" id="messageText" placeholder="Tell your parent what's happening... (be as detailed or brief as you want)"></textarea>
+        <div class="action-buttons">
+          <button class="cancel-btn" id="changeFeelingsBtn">Change Feeling</button>
+          <button class="send-btn" id="sendMessageBtn">Send to Parent</button>
+        </div>
+        <div class="suggestions">
+          <h3>💡 Things that might help:</h3>
+          <div class="suggestion-item">✨ Take 3 deep breaths</div>
+          <div class="suggestion-item">🎵 Listen to your favorite song</div>
+          <div class="suggestion-item">🚶 Go for a walk or move around</div>
+          <div class="suggestion-item">📱 Message your parent using this button</div>
+        </div>
+      </div>
+      <div id="successState" class="success-state">
+        <div class="success-icon">✅</div>
+        <h2>Message Sent!</h2>
+        <p>Your parent will see this right away and can reply to you.</p>
+        <button class="back-btn" id="backHomeBtn">Back to Today</button>
+      </div>
+    </div>
     <nav class="bottom-nav">
       <a class="nav-item" href="index.html">Today</a>
       <a class="nav-item" href="myweek.html">My Week</a>
       <a class="nav-item" href="index.html">School</a>
       <a class="nav-item" href="travel.html">Travel</a>
-      <button class="nav-item active">Help</button>
+      <a class="nav-item active" href="helpme.html">Help</a>
     </nav>
   </div>
-
   <script>
-    document.querySelectorAll('.help-option').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        alert('Logged: ' + btn.textContent + '. This would be saved and parents notified in the real app.');
+    let selectedFeeling = null;
+    document.querySelectorAll('.feeling-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.feeling-btn').forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedFeeling = this.dataset.feeling;
+        document.getElementById('feelingSelection').style.display = 'none';
+        document.getElementById('messagingSection').classList.add('active');
+        document.getElementById('messagingPrompt').textContent = `You selected: ${selectedFeeling}. Tell your parent more (or just send the feeling alone):`;
       });
     });
+    document.getElementById('changeFeelingsBtn').addEventListener('click', () => {
+      selectedFeeling = null;
+      document.querySelectorAll('.feeling-btn').forEach(b => b.classList.remove('selected'));
+      document.getElementById('messagingSection').classList.remove('active');
+      document.getElementById('feelingSelection').style.display = 'block';
+      document.getElementById('messageText').value = '';
+    });
+    document.getElementById('sendMessageBtn').addEventListener('click', () => {
+      const message = document.getElementById('messageText').value.trim();
+      const raw = localStorage.getItem('oneplace_childMessages');
+      let messages = [];
+      try { messages = raw ? JSON.parse(raw) : []; } catch (e) { }
+      messages.push({ feeling: selectedFeeling, message: message || '(No message, just sent feeling)', timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+      localStorage.setItem('oneplace_childMessages', JSON.stringify(messages));
+      document.getElementById('messagingSection').classList.remove('active');
+      document.getElementById('successState').classList.add('active');
+    });
+    document.getElementById('backHomeBtn').addEventListener('click', () => { window.location.href = 'index.html'; });
   </script>
 </body>
 </html>

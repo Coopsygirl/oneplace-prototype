@@ -10,7 +10,7 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icon-192.svg" />
   <link rel="apple-touch-icon" href="icon-192.svg" />
-  <title>One Place — Today (Prototype)</title>
+  <title>One Place — Today</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -24,7 +24,6 @@
         <div class="avatar">👧</div>
       </div>
     </header>
-
     <main>
       <section class="install-banner card">
         <div class="install-title">Install One Place on your phone</div>
@@ -39,7 +38,6 @@
           <li><label><input type="checkbox" data-task="pack"/> Pack your bag</label></li>
         </ul>
       </section>
-
       <section class="next-card card">
         <h3>Next</h3>
         <div class="transport">
@@ -51,19 +49,18 @@
         </div>
         <button id="viewTimetable" class="link-btn">View full timetable</button>
       </section>
-
       <section class="later-list card">
         <h3>Later</h3>
-        <div id="laterEvents">
-          <div style="color:#666">Loading activities...</div>
-        </div>
+        <div id="laterEvents"><div style="color:#666">Loading activities...</div></div>
       </section>
-
       <section class="help-me card">
-        <button id="helpMeBtn" class="help-btn">Help Me</button>
+        <button id="helpMeBtn" class="help-btn">💬 How Are You Feeling?</button>
+      </section>
+      <section class="messages-from-parent card" id="messagesFromParent" style="display: none;">
+        <h3>💬 Messages from Parent</h3>
+        <div id="parentMessages"></div>
       </section>
     </main>
-
     <nav class="bottom-nav">
       <a class="nav-item active" href="index.html">Today</a>
       <a class="nav-item" href="myweek.html">My Week</a>
@@ -72,88 +69,72 @@
       <a class="nav-item" href="helpme.html">Help</a>
     </nav>
   </div>
-
   <script>
-    // Basic prototype script: update date, local-checklist, and ETA countdown.
-    (function(){
-      const dateLine = document.getElementById('dateLine');
-      const now = new Date();
-      const opts = { weekday: 'long', month: 'long', day: 'numeric' };
-      dateLine.textContent = now.toLocaleDateString(undefined, opts);
-
-      // Child name editable via localStorage
-      const childNameEl = document.getElementById('childName');
-      const savedName = localStorage.getItem('oneplace_childName');
-      if (savedName) childNameEl.textContent = savedName;
-
-      // Micro tasks persistence
-      const tasks = document.querySelectorAll('#microTasks input[type=checkbox]');
-      tasks.forEach(cb => {
-        const key = 'task_' + cb.dataset.task;
-        const val = localStorage.getItem(key);
-        cb.checked = val === '1';
-        cb.addEventListener('change', ()=>{
-          localStorage.setItem(key, cb.checked ? '1' : '0');
-        });
+    if (localStorage.getItem('oneplace_loggedIn') === 'parent') { window.location.href = 'parent-dashboard.html'; }
+    const dateLine = document.getElementById('dateLine');
+    const now = new Date();
+    const opts = { weekday: 'long', month: 'long', day: 'numeric' };
+    dateLine.textContent = now.toLocaleDateString(undefined, opts);
+    const childNameEl = document.getElementById('childName');
+    const savedName = localStorage.getItem('oneplace_childName');
+    if (savedName) childNameEl.textContent = savedName;
+    const tasks = document.querySelectorAll('#microTasks input[type=checkbox]');
+    tasks.forEach(cb => {
+      const key = 'task_' + cb.dataset.task;
+      const val = localStorage.getItem(key);
+      cb.checked = val === '1';
+      cb.addEventListener('change', () => { localStorage.setItem(key, cb.checked ? '1' : '0'); });
+    });
+    let nextBus = localStorage.getItem('oneplace_nextBus');
+    if (!nextBus) { nextBus = Date.now() + 14*60*1000; localStorage.setItem('oneplace_nextBus', nextBus); }
+    nextBus = Number(nextBus);
+    function updateETA() {
+      const etaEl = document.getElementById('eta');
+      const diff = nextBus - Date.now();
+      if (diff <= 0) {
+        etaEl.textContent = 'Bus due now';
+        etaEl.classList.add('due');
+      } else {
+        const mins = Math.floor(diff / 60000);
+        const secs = Math.floor((diff % 60000)/1000);
+        etaEl.textContent = 'Leave home in ' + mins + 'm ' + (secs<10? '0'+secs:secs) + 's';
+      }
+    }
+    updateETA();
+    setInterval(updateETA, 1000);
+    document.getElementById('helpMeBtn').addEventListener('click', () => { window.location.href = 'helpme.html'; });
+    document.getElementById('viewTimetable').addEventListener('click', () => { alert('Timetable view (coming soon)'); });
+    function loadEvents() {
+      const raw = localStorage.getItem('oneplace_events');
+      try { return raw ? JSON.parse(raw) : []; } catch (e) { return []; }
+    }
+    function renderLater() {
+      const container = document.getElementById('laterEvents');
+      const events = loadEvents();
+      if (!container) return;
+      if (events.length === 0) { container.innerHTML = '<div class="event"><div class="time">No events</div><div class="meta">No upcoming activities</div></div>'; return; }
+      container.innerHTML = '';
+      events.forEach(e => {
+        const el = document.createElement('div'); el.className = 'event';
+        const time = document.createElement('div'); time.className = 'time'; time.textContent = e.time ? e.time : '';
+        const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = (e.title || '') + (e.location ? ' — ' + e.location : '');
+        const note = document.createElement('div'); note.style.fontSize = '12px'; note.style.color = '#999'; note.style.marginTop = '6px'; note.textContent = e.note;
+        el.appendChild(time); el.appendChild(meta); el.appendChild(note);
+        container.appendChild(el);
       });
-
-      // ETA countdown (prototype uses now + 14min default)
-      let nextBus = localStorage.getItem('oneplace_nextBus');
-      if (!nextBus) {
-        nextBus = Date.now() + 14*60*1000; // 14 minutes from now
-        localStorage.setItem('oneplace_nextBus', nextBus);
-      }
-      nextBus = Number(nextBus);
-
-      function updateETA(){
-        const etaEl = document.getElementById('eta');
-        const diff = nextBus - Date.now();
-        if (diff <= 0) {
-          etaEl.textContent = 'Bus due now';
-          etaEl.classList.add('due');
-        } else {
-          const mins = Math.floor(diff / 60000);
-          const secs = Math.floor((diff % 60000)/1000);
-          etaEl.textContent = 'Leave home in ' + mins + 'm ' + (secs<10? '0'+secs:secs) + 's';
-        }
-      }
-      updateETA();
-      setInterval(updateETA, 1000);
-
-      document.getElementById('helpMeBtn').addEventListener('click', ()=>{
-        const choice = prompt('What do you need right now?\n1) Everything feels too much\n2) I\'m angry\n3) I\'m worried\n4) I don\'t know what to do\n5) I need some quiet', '1');
-        if (choice) {
-          alert('Logged: ' + choice + '. Your parent will be shown this in the app (prototype).');
-          // In real app, this would POST an occurrence.
-        }
-      });
-
-      document.getElementById('viewTimetable').addEventListener('click', ()=>{
-        alert('Timetable view (prototype)');
-      });
-
-      // Render parent-added events from localStorage (if any)
-      function loadEvents(){
-        const raw = localStorage.getItem('oneplace_events');
-        try{return raw?JSON.parse(raw):[]}catch(e){return []}
-      }
-      function renderLater(){
-        const container = document.getElementById('laterEvents');
-        const events = loadEvents();
-        if(!container) return;
-        if(events.length===0){ container.innerHTML = '<div class="event"><div class="time">No events</div><div class="meta">No upcoming activities</div></div>'; return; }
-        container.innerHTML = '';
-        events.forEach(e=>{
-          const el = document.createElement('div'); el.className='event';
-          const time = document.createElement('div'); time.className='time'; time.textContent = e.time ? e.time : '';
-          const meta = document.createElement('div'); meta.className='meta'; meta.textContent = (e.title||'') + (e.location? ' — '+e.location : '');
-          el.appendChild(time); el.appendChild(meta);
-          container.appendChild(el);
-        });
-      }
-      renderLater();
-
-    })();
+    }
+    function renderParentMessages() {
+      const raw = localStorage.getItem('oneplace_parentReplies');
+      let replies = [];
+      try { replies = raw ? JSON.parse(raw) : []; } catch (e) { }
+      if (replies.length === 0) return;
+      document.getElementById('messagesFromParent').style.display = 'block';
+      const container = document.getElementById('parentMessages');
+      container.innerHTML = replies.map((r, idx) => `<div style="background: #fff0f7; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #ff69b4;"><div style="font-weight: 600; color: #333; margin-bottom: 4px;">💬 Parent replied</div><div style="color: #666; font-size: 14px;">${r.message}</div><div style="font-size: 12px; color: #999; margin-top: 6px;">${r.timestamp}</div></div>`).join('');
+    }
+    renderLater();
+    renderParentMessages();
+    setInterval(() => { renderParentMessages(); }, 2000);
   </script>
 </body>
 </html>

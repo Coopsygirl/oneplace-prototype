@@ -10,217 +10,396 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icon-192.svg" />
   <link rel="apple-touch-icon" href="icon-192.svg" />
-  <title>One Place — Parent Dashboard (Prototype)</title>
+  <title>One Place — Parent Dashboard</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .parent-header {
+      background: linear-gradient(135deg, #ff69b4 0%, #ffd8e6 100%);
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .parent-header h1 {
+      font-size: 24px;
+      margin: 0;
+    }
+    .parent-header .logout-btn {
+      background: rgba(255,255,255,0.3);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin: 25px 20px 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #ff69b4;
+    }
+    .add-btn {
+      background: #ff69b4;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 0 20px 15px;
+      transition: transform 0.1s;
+    }
+    .add-btn:active {
+      transform: scale(0.95);
+    }
+    .event-item {
+      background: white;
+      margin: 0 20px 12px;
+      padding: 16px;
+      border-radius: 10px;
+      border-left: 4px solid #ff69b4;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .event-info {
+      flex: 1;
+    }
+    .event-info .title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    .event-info .time {
+      font-size: 13px;
+      color: #999;
+    }
+    .delete-btn {
+      background: #ffccdd;
+      color: #ff69b4;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .messages-card {
+      background: #fffbfd;
+      margin: 20px;
+      padding: 20px;
+      border-radius: 15px;
+      border: 2px solid #ffdee6;
+    }
+    .messages-card h3 {
+      color: #ff69b4;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+    .message-item {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 3px solid #ff69b4;
+    }
+    .message-item .feeling {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    .message-item .time {
+      font-size: 12px;
+      color: #999;
+    }
+    .message-item .reply-btn {
+      background: #ff69b4;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .modal-content h2 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      color: #333;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #eee;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #ffd8e6;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .modal-buttons button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .modal-buttons .save-btn {
+      background: #ff69b4;
+      color: white;
+    }
+    .modal-buttons .cancel-btn {
+      background: #eee;
+      color: #333;
+    }
+    .empty-state {
+      text-align: center;
+      color: #999;
+      padding: 40px 20px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
   <div class="app">
-    <header class="header">
-      <div class="greeting">
-        <div>
-          <div class="hello">Parent Dashboard — Jamie</div>
-          <div class="date">Manage activities & occurrences</div>
-        </div>
-        <div class="avatar">👩</div>
-      </div>
-    </header>
+    <div class="parent-header">
+      <h1>Parent Dashboard</h1>
+      <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
 
     <main>
-      <section class="card">
-        <h2>Child Profile</h2>
-        <div class="form-row"><label>Name<br/><input id="childNameInput" type="text" placeholder="Jamie"></label></div>
-        <div class="form-row"><label>Date of birth<br/><input id="childDOB" type="date"></label></div>
-        <div class="form-row"><label>Things that help<br/><textarea id="strategies" rows="3" placeholder="Quiet corner, visual timetable, extra time"></textarea></label></div>
-        <div style="margin-top:8px"><button id="saveProfile" class="help-btn">Save Profile</button></div>
-      </section>
-      <section class="card">
-        <h2>Add Activity</h2>
-        <div class="form-row"><label>Title<br/><input id="title" type="text" placeholder="Football training"></label></div>
-        <div class="form-row"><label>Date<br/><input id="date" type="date"></label></div>
-        <div class="form-row"><label>Time<br/><input id="time" type="time"></label></div>
-        <div class="form-row"><label>Location<br/><input id="location" type="text" placeholder="Riverside Sports Centre"></label></div>
-        <div class="form-row"><label>Notes<br/><input id="notes" type="text" placeholder="Bring water bottle"></label></div>
-        <div style="margin-top:8px"><button id="addActivity" class="help-btn">Add Activity</button></div>
-      </section>
-
-      <section class="card">
-        <h2>Upcoming Activities</h2>
-        <div id="eventsList"></div>
-      </section>
-
-      <section class="card">
-        <h2>Record Occurrence</h2>
-        <div class="form-row"><label>What happened before?<br/><input id="before" type="text"></label></div>
-        <div class="form-row"><label>What happened?<br/><input id="happened" type="text"></label></div>
-        <div class="form-row"><label>What helped?<br/><input id="helped" type="text"></label></div>
-        <div style="margin-top:8px"><button id="recordOcc" class="help-btn">Save Occurrence</button></div>
-      </section>
-
-      <section class="card">
-        <h2>Saved Occurrences</h2>
-        <div id="occList"></div>
-      </section>
-
-      <section class="card">
-        <h2>Support Passport (preview)</h2>
-        <div style="margin-bottom:8px">
-          <button id="previewPassport" class="help-btn">Preview Passport</button>
-          <button id="downloadPassport" class="help-btn">Download PDF</button>
+      <!-- Quick Stats -->
+      <div class="section-title">📊 Today's Check-In</div>
+      <div id="childStatus" class="card" style="margin: 0 20px 20px; padding: 16px; background: linear-gradient(135deg, #fff0f7 0%, #fffbfd 100%); border-left: 4px solid #ff69b4;">
+        <div style="font-weight: 600; color: #333; margin-bottom: 8px;">
+          <span id="childStatusName">Jamie</span>'s Status
         </div>
-        <div id="passportPreview" style="color:#666">No preview yet.</div>
-      </section>
+        <div id="lastFeeling" style="font-size: 14px; color: #666;">No check-ins yet</div>
+      </div>
 
-      <p style="color:#666;font-size:13px">Tip: These items are saved to your browser storage and will appear in the child prototype if opened on the same device/browser.</p>
+      <!-- Messages from Child -->
+      <div class="section-title">💬 Messages from Child</div>
+      <div id="messagesContainer" class="messages-card">
+        <div class="empty-state">No messages yet. Child can send feelings & quick messages from the app.</div>
+      </div>
 
+      <!-- Add Event Section -->
+      <div class="section-title">📅 Add Activity / Schedule</div>
+      <button class="add-btn" id="addEventBtn">+ Add Event for Jamie</button>
+
+      <!-- Events List -->
+      <div id="eventsContainer">
+        <div class="empty-state" style="padding: 30px 20px;">No events yet. Add one to sync to child's view.</div>
+      </div>
     </main>
+  </div>
 
-    <nav class="bottom-nav">
-      <a class="nav-item" href="index.html">Child view</a>
-      <a class="nav-item" href="myweek.html">My Week</a>
-      <a class="nav-item" href="helpme.html">Help</a>
-      <a class="nav-item" href="travel.html">Travel</a>
-      <a class="nav-item active" href="parent-dashboard.html">Parent</a>
-    </nav>
+  <!-- Add Event Modal -->
+  <div id="addEventModal" class="modal">
+    <div class="modal-content">
+      <h2>Add Activity for Child</h2>
+      <div class="form-group">
+        <label for="eventTitle">What's happening?</label>
+        <input type="text" id="eventTitle" placeholder="e.g., School pickup, Lunch time" />
+      </div>
+      <div class="form-group">
+        <label for="eventTime">When?</label>
+        <input type="time" id="eventTime" />
+      </div>
+      <div class="form-group">
+        <label for="eventLocation">Where?</label>
+        <input type="text" id="eventLocation" placeholder="e.g., School, Home" />
+      </div>
+      <div class="form-group">
+        <label for="eventNote">How much detail should Jamie see?</label>
+        <textarea id="eventNote" placeholder="Keep it simple & calm. E.g., 'You'll walk to school with mum'"></textarea>
+      </div>
+      <div class="modal-buttons">
+        <button class="cancel-btn" id="cancelEventBtn">Cancel</button>
+        <button class="save-btn" id="saveEventBtn">Add to Schedule</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reply Modal -->
+  <div id="replyModal" class="modal">
+    <div class="modal-content">
+      <h2>Reply to Jamie</h2>
+      <div id="replyContext" style="background: #f5f5f5; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; color: #666;"></div>
+      <div class="form-group">
+        <label for="replyText">Your message:</label>
+        <textarea id="replyText" placeholder="Send Jamie a quick, calm response..."></textarea>
+      </div>
+      <div class="modal-buttons">
+        <button class="cancel-btn" id="cancelReplyBtn">Cancel</button>
+        <button class="save-btn" id="sendReplyBtn">Send Message</button>
+      </div>
+    </div>
   </div>
 
   <script>
-    function loadEvents(){
+    if (!localStorage.getItem('oneplace_loggedIn') || localStorage.getItem('oneplace_loggedIn') !== 'parent') {
+      window.location.href = 'parent-login.html';
+    }
+
+    const childName = localStorage.getItem('oneplace_childName') || 'Child';
+    document.querySelectorAll('#childStatusName').forEach(el => { el.textContent = childName; });
+    document.querySelector('.add-btn').textContent = `+ Add Event for ${childName}`;
+
+    function loadEvents() {
       const raw = localStorage.getItem('oneplace_events');
-      try{
-        return raw ? JSON.parse(raw) : [];
-      }catch(e){return []}
-    }
-    function saveEvents(ev){
-      localStorage.setItem('oneplace_events', JSON.stringify(ev));
+      try { return raw ? JSON.parse(raw) : []; } catch (e) { return []; }
     }
 
-    function renderEvents(){
-      const list = document.getElementById('eventsList');
+    function saveEvents(events) {
+      localStorage.setItem('oneplace_events', JSON.stringify(events));
+      renderEvents();
+    }
+
+    function renderEvents() {
+      const container = document.getElementById('eventsContainer');
       const events = loadEvents();
-      if(events.length===0){ list.innerHTML = '<div style="color:#666">No activities yet.</div>'; return; }
-      list.innerHTML = '';
-      events.forEach((e,idx)=>{
-        const div = document.createElement('div');
-        div.className = 'event';
-        const time = document.createElement('div'); time.className='time'; time.textContent = e.time || '';
-        const meta = document.createElement('div'); meta.className='meta'; meta.textContent = (e.title||'') + (e.location? ' — '+e.location : '');
-        const controls = document.createElement('div'); controls.style.marginLeft='8px';
-        // Share toggle
-        const share = document.createElement('label'); share.style.marginLeft='8px';
-        const chk = document.createElement('input'); chk.type='checkbox'; chk.checked = !!e.shareWithSchool; chk.addEventListener('change', ()=>{ e.shareWithSchool = chk.checked; saveEvents(events); renderPassportPreview(); });
-        share.appendChild(chk); share.appendChild(document.createTextNode(' Share with school'));
-        // Edit button
-        const edit = document.createElement('button'); edit.textContent='Edit'; edit.style.marginLeft='8px'; edit.addEventListener('click', ()=>{
-          const newTitle = prompt('Title', e.title) || e.title;
-          const newDate = prompt('Date (YYYY-MM-DD)', e.date) || e.date;
-          const newTime = prompt('Time (HH:MM)', e.time) || e.time;
-          const newLoc = prompt('Location', e.location) || e.location;
-          e.title = newTitle; e.date = newDate; e.time = newTime; e.location = newLoc; saveEvents(events); renderEvents(); renderPassportPreview();
-        });
-        const del = document.createElement('button'); del.textContent='Delete'; del.style.marginLeft='8px';
-        del.addEventListener('click', ()=>{ if(confirm('Delete this activity?')){ events.splice(idx,1); saveEvents(events); renderEvents(); renderPassportPreview(); } });
-        controls.appendChild(edit); controls.appendChild(del); controls.appendChild(share);
-        div.appendChild(time); div.appendChild(meta); div.appendChild(controls);
-        list.appendChild(div);
-      });
+      if (events.length === 0) {
+        container.innerHTML = '<div class="empty-state" style="padding: 30px 20px;">No events yet. Add one to sync to child\'s view.</div>';
+        return;
+      }
+      container.innerHTML = events.map((e, idx) => `<div class="event-item"><div class="event-info"><div class="title">${e.title}</div><div class="time">${e.time} ${e.location ? '• ' + e.location : ''}</div><div style="font-size: 12px; color: #999; margin-top: 6px;">${e.note}</div></div><button class="delete-btn" onclick="deleteEvent(${idx})">Delete</button></div>`).join('');
     }
 
-    document.getElementById('addActivity').addEventListener('click', ()=>{
-      const title = document.getElementById('title').value;
-      const date = document.getElementById('date').value;
-      const time = document.getElementById('time').value;
-      const location = document.getElementById('location').value;
-      const notes = document.getElementById('notes').value;
-      if(!title||!date||!time){ alert('Please fill Title, Date and Time'); return; }
+    window.deleteEvent = function(idx) {
       const events = loadEvents();
-      events.push({ id: 'ev_'+Date.now(), childId: 'child_jamie', title, date, time, location, notes, createdBy:'parent', completed:false });
-      saveEvents(events); renderEvents();
-      alert('Activity added and saved. Open the Child view to see it.');
-      // clear form
-      document.getElementById('title').value=''; document.getElementById('date').value=''; document.getElementById('time').value=''; document.getElementById('location').value=''; document.getElementById('notes').value='';
-    });
+      events.splice(idx, 1);
+      saveEvents(events);
+    };
 
-    // Occurrences
-    function loadOcc(){const raw = localStorage.getItem('oneplace_occurrences'); try{return raw?JSON.parse(raw):[];}catch(e){return []}}
-    function saveOcc(o){localStorage.setItem('oneplace_occurrences', JSON.stringify(o));}
-    function renderOcc(){const list = document.getElementById('occList'); const occ = loadOcc(); if(occ.length===0){list.innerHTML='<div style="color:#666">No occurrences recorded.</div>'; return;} list.innerHTML=''; occ.forEach((o,idx)=>{const d=document.createElement('div'); d.className='event'; d.innerHTML='<div class="time">'+new Date(o.timestamp).toLocaleString()+'</div><div class="meta">'+o.happened+'</div>'; const del=document.createElement('button'); del.textContent='Delete'; del.style.marginLeft='8px'; del.addEventListener('click', ()=>{ occ.splice(idx,1); saveOcc(occ); renderOcc(); }); d.appendChild(del); list.appendChild(d); })}
-
-    document.getElementById('recordOcc').addEventListener('click', ()=>{
-      const before = document.getElementById('before').value;
-      const happened = document.getElementById('happened').value;
-      const helped = document.getElementById('helped').value;
-      if(!happened){alert('Please describe what happened'); return;}
-      const occ = loadOcc(); occ.push({ id:'oc_'+Date.now(), childId:'child_jamie', timestamp:Date.now(), before, happened, helped, recordedBy:'parent' }); saveOcc(occ); renderOcc(); alert('Occurrence saved.'); document.getElementById('before').value=''; document.getElementById('happened').value=''; document.getElementById('helped').value='';
-    });
-
-    renderEvents(); renderOcc();
-
-    // Support Passport preview + download
-    function renderPassportPreview(){
-      const preview = document.getElementById('passportPreview');
-      const child = localStorage.getItem('oneplace_childName') || localStorage.getItem('oneplace_childName_input') || 'Jamie';
-      const dob = localStorage.getItem('oneplace_childDOB') || '';
-      const strategies = localStorage.getItem('oneplace_strategies') || '';
-      const events = loadEvents().filter(e=>e.shareWithSchool);
-      const occ = loadOcc();
-      if(events.length===0 && occ.length===0){ preview.textContent = 'No shared information yet.'; return; }
-      let html = '';
-      html += child + (dob? (' — DOB: '+dob) : '') + '\n\n';
-      if(strategies){ html += 'Things that help: '+strategies+'\n\n'; }
-      if(events.length){ html += 'Shared activities:\n'; events.forEach(ev=>{ html += '- '+(ev.title||'')+' '+(ev.date||'')+' '+(ev.time||'')+' ('+(ev.location||'')+')\n'; }); html += '\n'; }
-      if(occ.length){ html += 'Recent occurrences:\n'; occ.slice(-5).forEach(o=>{ html += '- '+new Date(o.timestamp).toLocaleString()+': '+o.happened+'\n'; }); }
-      preview.textContent = html;
+    function loadMessages() {
+      const raw = localStorage.getItem('oneplace_childMessages');
+      try { return raw ? JSON.parse(raw) : []; } catch (e) { return []; }
     }
 
-    document.getElementById('previewPassport').addEventListener('click', ()=>{
-      renderPassportPreview();
-      alert('Preview updated below. Use Download PDF to open a printable passport.');
+    function renderMessages() {
+      const container = document.getElementById('messagesContainer');
+      const messages = loadMessages();
+      if (messages.length === 0) {
+        container.innerHTML = '<div class="empty-state">No messages yet. Child can send feelings & quick messages from the app.</div>';
+        return;
+      }
+      container.innerHTML = messages.map((m, idx) => `<div class="message-item"><div class="feeling">🎭 ${m.feeling}</div><div style="margin: 8px 0; color: #333;">${m.message}</div><div class="time">${m.timestamp}</div><button class="reply-btn" onclick="openReplyModal(${idx})">Reply Now</button></div>`).join('');
+    }
+
+    window.openReplyModal = function(idx) {
+      const messages = loadMessages();
+      const msg = messages[idx];
+      document.getElementById('replyContext').textContent = `"${msg.feeling}" — ${msg.message}`;
+      document.getElementById('replyModal').classList.add('active');
+      document.getElementById('sendReplyBtn').onclick = () => sendReply(idx);
+    };
+
+    function sendReply(idx) {
+      const replyText = document.getElementById('replyText').value;
+      if (!replyText.trim()) return;
+      const replies = JSON.parse(localStorage.getItem('oneplace_parentReplies') || '[]');
+      replies.push({ message: replyText, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+      localStorage.setItem('oneplace_parentReplies', JSON.stringify(replies));
+      alert(`Message sent to ${childName}!`);
+      document.getElementById('replyText').value = '';
+      document.getElementById('replyModal').classList.remove('active');
+    }
+
+    document.getElementById('addEventBtn').addEventListener('click', () => {
+      document.getElementById('addEventModal').classList.add('active');
     });
 
-    document.getElementById('downloadPassport').addEventListener('click', ()=>{
-      const child = localStorage.getItem('oneplace_childName') || localStorage.getItem('oneplace_childName_input') || 'Jamie';
-      const dob = localStorage.getItem('oneplace_childDOB') || '';
-      const strategies = localStorage.getItem('oneplace_strategies') || '';
-      const events = loadEvents().filter(e=>e.shareWithSchool);
-      const occ = loadOcc();
-      const win = window.open('', '_blank');
-      const doc = win.document;
-      doc.write('<!doctype html><html><head><title>Support Passport - '+child+'</title><style>body{font-family:Arial,Helvetica,sans-serif;padding:20px;background:#fff6fb}h1{color:#d63384} .section{margin-bottom:12px} .meta{color:#666}</style></head><body>');
-      doc.write('<h1>Support Passport — '+child+'</h1>');
-      if(dob) doc.write('<div class="meta">DOB: '+dob+'</div>');
-      if(strategies) doc.write('<div class="meta">Things that help: '+strategies+'</div>');
-      doc.write('<hr/>');
-      doc.write('<div class="section"><h3>Shared activities</h3>');
-      if(events.length){ doc.write('<ul>'); events.forEach(ev=>{ doc.write('<li>'+(ev.title||'')+' — '+(ev.date||'')+' '+(ev.time||'')+' ('+(ev.location||'')+')</li>'); }); doc.write('</ul>'); } else { doc.write('<div>No shared activities</div>'); }
-      doc.write('</div>');
-      doc.write('<div class="section"><h3>Recent occurrences</h3>');
-      if(occ.length){ doc.write('<ul>'); occ.slice(-10).forEach(o=>{ doc.write('<li>'+new Date(o.timestamp).toLocaleString()+': '+(o.happened||'')+'</li>'); }); doc.write('</ul>'); } else { doc.write('<div>No occurrences recorded</div>'); }
-      doc.write('</div>');
-      doc.write('<div style="margin-top:24px;color:#666">Generated from One Place prototype</div>');
-      doc.write('</body></html>');
-      doc.close();
-      win.print();
+    document.getElementById('cancelEventBtn').addEventListener('click', () => {
+      document.getElementById('addEventModal').classList.remove('active');
+      document.getElementById('eventTitle').value = '';
+      document.getElementById('eventTime').value = '';
+      document.getElementById('eventLocation').value = '';
+      document.getElementById('eventNote').value = '';
     });
 
-    // initial passport preview
-    renderPassportPreview();
-
-    // Profile: load/save
-    const nameInput = document.getElementById('childNameInput');
-    const dobInput = document.getElementById('childDOB');
-    const strategiesInput = document.getElementById('strategies');
-    // load existing
-    const savedName = localStorage.getItem('oneplace_childName'); if(savedName) nameInput.value = savedName;
-    const savedDOB = localStorage.getItem('oneplace_childDOB'); if(savedDOB) dobInput.value = savedDOB;
-    const savedStrat = localStorage.getItem('oneplace_strategies'); if(savedStrat) strategiesInput.value = savedStrat;
-    document.getElementById('saveProfile').addEventListener('click', ()=>{
-      const n = nameInput.value || 'Jamie';
-      localStorage.setItem('oneplace_childName', n);
-      localStorage.setItem('oneplace_childDOB', dobInput.value || '');
-      localStorage.setItem('oneplace_strategies', strategiesInput.value || '');
-      alert('Profile saved. Passport preview will include these details.');
-      renderPassportPreview();
+    document.getElementById('saveEventBtn').addEventListener('click', () => {
+      const title = document.getElementById('eventTitle').value.trim();
+      const time = document.getElementById('eventTime').value;
+      const location = document.getElementById('eventLocation').value.trim();
+      const note = document.getElementById('eventNote').value.trim();
+      if (!title || !time) { alert('Please fill in the activity and time'); return; }
+      const events = loadEvents();
+      events.push({ title, time, location, note });
+      saveEvents(events);
+      document.getElementById('addEventModal').classList.remove('active');
+      document.getElementById('eventTitle').value = '';
+      document.getElementById('eventTime').value = '';
+      document.getElementById('eventLocation').value = '';
+      document.getElementById('eventNote').value = '';
     });
+
+    document.getElementById('cancelReplyBtn').addEventListener('click', () => {
+      document.getElementById('replyModal').classList.remove('active');
+      document.getElementById('replyText').value = '';
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('oneplace_loggedIn');
+      localStorage.removeItem('oneplace_parentEmail');
+      window.location.href = 'parent-login.html';
+    });
+
+    renderEvents();
+    renderMessages();
+    setInterval(() => { renderMessages(); }, 1000);
   </script>
 </body>
 </html>
