@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#a8d8f0" />
+  <meta name="theme-color" content="#4facfe" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="One Place" />
@@ -20,122 +20,150 @@
     }
 
     body {
-      background: linear-gradient(135deg, #a8d8f0 0%, #e8d4f1 50%, #f5d8e8 100%);
+      background: linear-gradient(135deg, #fff8fb 0%, #fef5ff 50%, #fff0f8 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      overflow-x: hidden;
     }
 
     .landing-container {
       max-width: 500px;
       width: 100%;
-      text-align: center;
     }
 
-    .logo-section {
+    .hero-section {
+      text-align: center;
       margin-bottom: 40px;
+      animation: slideUp 0.6s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .logo {
-      font-size: 80px;
-      margin-bottom: 20px;
+      font-size: 72px;
+      margin-bottom: 16px;
       display: inline-block;
       animation: float 3s ease-in-out infinite;
     }
 
     @keyframes float {
       0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-12px); }
     }
 
     h1 {
-      font-size: 42px;
-      color: #2d3748;
-      margin-bottom: 12px;
-      font-weight: 700;
+      font-size: 40px;
+      color: #1a1a2e;
+      margin-bottom: 8px;
+      font-weight: 800;
       letter-spacing: -0.5px;
     }
 
     .tagline {
-      font-size: 18px;
-      color: #5a6c7d;
-      margin-bottom: 50px;
-      font-weight: 400;
-      line-height: 1.6;
-    }
-
-    .button-group {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 40px;
-    }
-
-    .btn {
-      padding: 16px 32px;
-      border: none;
-      border-radius: 14px;
       font-size: 16px;
-      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 40px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .quick-access {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .access-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      border: 2px solid #f0e8f5;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
       text-decoration: none;
-      display: inline-block;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, #7ec8e3 0%, #a8d8f0 100%);
-      color: #2d3748;
+    .access-card:active {
+      transform: scale(0.95);
     }
 
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px rgba(126, 200, 227, 0.3);
+    .access-card.blue {
+      border-color: #7dd3fc;
+      background: linear-gradient(135deg, rgba(125, 211, 252, 0.1) 0%, rgba(125, 211, 252, 0.05) 100%);
     }
 
-    .btn-primary:active {
-      transform: translateY(-1px);
+    .access-card.blue:hover {
+      border-color: #4facfe;
+      box-shadow: 0 8px 20px rgba(79, 172, 254, 0.15);
     }
 
-    .btn-secondary {
-      background: linear-gradient(135deg, #d4a5e8 0%, #e8d4f1 100%);
-      color: #2d3748;
+    .access-card.pink {
+      border-color: #ffa5ce;
+      background: linear-gradient(135deg, rgba(255, 167, 206, 0.1) 0%, rgba(255, 167, 206, 0.05) 100%);
     }
 
-    .btn-secondary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px rgba(212, 165, 232, 0.3);
+    .access-card.pink:hover {
+      border-color: #ff6b9d;
+      box-shadow: 0 8px 20px rgba(255, 107, 157, 0.15);
     }
 
-    .btn-secondary:active {
-      transform: translateY(-1px);
+    .access-icon {
+      font-size: 48px;
     }
 
-    .features {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+    .access-label {
+      font-weight: 700;
+      color: #1a1a2e;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .access-subtext {
+      font-size: 12px;
+      color: #718096;
+      text-align: center;
+    }
+
+    .features-section {
+      background: linear-gradient(135deg, #4facfe 0%, #ff6b9d 100%);
       border-radius: 20px;
       padding: 32px 24px;
-      margin-top: 50px;
+      color: white;
+      margin-bottom: 24px;
+      box-shadow: 0 12px 32px rgba(79, 172, 254, 0.2);
     }
 
-    .features h3 {
+    .features-section h3 {
       font-size: 14px;
-      color: #5a6c7d;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 24px;
-      font-weight: 600;
+      margin-bottom: 20px;
+      font-weight: 700;
+      opacity: 0.95;
     }
 
     .feature-list {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 14px;
       list-style: none;
     }
 
@@ -143,34 +171,35 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      font-size: 15px;
-      color: #2d3748;
+      font-size: 14px;
       font-weight: 500;
     }
 
     .feature-icon {
-      font-size: 24px;
-      display: inline-block;
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, #a8d8f0 0%, #e8d4f1 100%);
-      border-radius: 10px;
+      font-size: 20px;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+    }
+
+    .footer-section {
+      text-align: center;
+      padding: 0 20px;
     }
 
     .footer-text {
       font-size: 12px;
-      color: #7a8a9a;
-      margin-top: 40px;
+      color: #4a5568;
       line-height: 1.6;
+      margin-bottom: 20px;
     }
 
-    .footer-text a {
-      color: #7ec8e3;
-      text-decoration: none;
-      font-weight: 600;
+    .footer-text strong {
+      color: #1a1a2e;
     }
 
     @media (max-width: 480px) {
@@ -179,14 +208,23 @@
       }
 
       .tagline {
-        font-size: 16px;
+        font-size: 15px;
+        margin-bottom: 32px;
       }
 
       .logo {
         font-size: 64px;
       }
 
-      .features {
+      .quick-access {
+        gap: 10px;
+      }
+
+      .access-card {
+        padding: 16px;
+      }
+
+      .features-section {
         padding: 24px 20px;
       }
     }
@@ -194,19 +232,27 @@
 </head>
 <body>
   <div class="landing-container">
-    <div class="logo-section">
+    <div class="hero-section">
       <div class="logo">📍</div>
       <h1>One Place</h1>
-      <p class="tagline">Your calm, connected family hub. Schedules, support, and peace of mind.</p>
+      <p class="tagline">Your calm, connected family hub</p>
     </div>
 
-    <div class="button-group">
-      <button class="btn btn-primary" onclick="enterApp()">For Child</button>
-      <button class="btn btn-secondary" onclick="parentLogin()">For Parent</button>
+    <div class="quick-access">
+      <a class="access-card blue" onclick="enterApp(); return false;" href="#">
+        <div class="access-icon">👧</div>
+        <div class="access-label">For Child</div>
+        <div class="access-subtext">Today's schedule</div>
+      </a>
+      <a class="access-card pink" onclick="parentLogin(); return false;" href="#">
+        <div class="access-icon">👩‍👧</div>
+        <div class="access-label">For Parent</div>
+        <div class="access-subtext">Dashboard</div>
+      </a>
     </div>
 
-    <div class="features">
-      <h3>How It Works</h3>
+    <div class="features-section">
+      <h3>✨ What You Get</h3>
       <ul class="feature-list">
         <li>
           <span class="feature-icon">📅</span>
@@ -221,14 +267,16 @@
           <span>Check-in on feelings & wellbeing</span>
         </li>
         <li>
-          <span class="feature-icon">🎯</span>
-          <span>Real-time travel & transport updates</span>
+          <span class="feature-icon">🚌</span>
+          <span>Real-time travel updates</span>
         </li>
       </ul>
     </div>
 
-    <div class="footer-text">
-      <p>One Place is designed to reduce anxiety and help families stay organized and connected.</p>
+    <div class="footer-section">
+      <p class="footer-text">
+        <strong>One Place</strong> reduces anxiety and helps families stay organized and connected. No passwords needed for demo mode.
+      </p>
     </div>
   </div>
 
