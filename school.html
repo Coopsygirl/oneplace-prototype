@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#4facfe" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="One Place" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon-192.svg" />
+  <link rel="apple-touch-icon" href="icon-192.svg" />
+  <title>One Place — School</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .page-header {
+      background: linear-gradient(135deg, #7dd3fc 0%, #ffa5ce 100%);
+      color: #1a1a2e;
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 0 0 8px 0;
+    }
+
+    .page-header p {
+      font-size: 14px;
+      opacity: 0.8;
+      margin: 0;
+    }
+
+    .page-content {
+      padding: 0 18px 100px 18px;
+    }
+
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .subject-card {
+      background: white;
+      border: 2px solid #f0e8f5;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      cursor: pointer;
+    }
+
+    .subject-card:hover {
+      border-color: #7dd3fc;
+      box-shadow: 0 4px 12px rgba(79, 172, 254, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .subject-icon {
+      font-size: 32px;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .subject-info {
+      flex: 1;
+    }
+
+    .subject-title {
+      font-weight: 700;
+      color: #1a1a2e;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .subject-teacher {
+      font-size: 12px;
+      color: #718096;
+      margin-bottom: 6px;
+    }
+
+    .subject-details {
+      font-size: 13px;
+      color: #4a5568;
+      line-height: 1.3;
+    }
+
+    .subject-time {
+      font-size: 12px;
+      color: #4facfe;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .timetable-section {
+      background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(255, 107, 157, 0.1) 100%);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 20px;
+    }
+
+    .timetable-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #1a1a2e;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .timetable-item {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .timetable-time {
+      font-weight: 700;
+      color: #4facfe;
+      font-size: 12px;
+    }
+
+    .timetable-subject {
+      flex: 1;
+      margin-left: 12px;
+      color: #4a5568;
+      font-weight: 600;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #718096;
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .empty-text {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .empty-subtext {
+      font-size: 12px;
+      color: #a0aec0;
+    }
+
+    .homework-section {
+      background: linear-gradient(135deg, #ffa5ce 0%, rgba(255, 107, 157, 0.1) 100%);
+      border-left: 4px solid #ff6b9d;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    .homework-label {
+      font-weight: 700;
+      color: #ff6b9d;
+      margin-bottom: 4px;
+    }
+
+    .homework-text {
+      color: #4a5568;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="page-header">
+      <h1>📚 School</h1>
+      <p>Your classes and timetable</p>
+    </div>
+
+    <!-- Top Navigation -->
+    <div class="top-nav">
+      <a class="top-nav-item" href="index.html">
+        <span class="top-nav-icon">📅</span>
+        <span>Today</span>
+      </a>
+      <a class="top-nav-item" href="myweek.html">
+        <span class="top-nav-icon">📅</span>
+        <span>Week</span>
+      </a>
+      <a class="top-nav-item" href="home-tasks.html">
+        <span class="top-nav-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a class="top-nav-item active" href="school.html">
+        <span class="top-nav-icon">📚</span>
+        <span>School</span>
+      </a>
+      <a class="top-nav-item" href="helpme.html">
+        <span class="top-nav-icon">❤️</span>
+        <span>Help</span>
+      </a>
+    </div>
+
+    <div class="page-content">
+      <div class="subjects-grid" id="subjectsGrid">
+        <div class="empty-state">
+          <div class="empty-icon">📚</div>
+          <div class="empty-text">No school schedule yet</div>
+          <div class="empty-subtext">Your timetable will appear here</div>
+        </div>
+      </div>
+
+      <div class="timetable-section">
+        <div class="timetable-title">Today's Timetable</div>
+        <div id="timetableContainer">
+          <div style="text-align: center; padding: 20px; color: #718096; font-size: 13px;">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="bottom-nav">
+      <a class="nav-item" href="index.html">Today</a>
+      <a class="nav-item" href="myweek.html">Week</a>
+      <a class="nav-item" href="home-tasks.html">Home</a>
+      <a class="nav-item active" href="school.html">School</a>
+      <a class="nav-item" href="helpme.html">Help</a>
+    </nav>
+  </div>
+
+  <script>
+    // Redirect if not logged in as child
+    if (localStorage.getItem('oneplace_loggedIn') !== 'child') {
+      window.location.href = 'landing.html';
+    }
+
+    const childName = localStorage.getItem('oneplace_childName') || 'Jamie';
+
+    // School subjects and schedule
+    const subjects = [
+      { 
+        icon: '📖', 
+        title: 'English', 
+        teacher: 'Mrs. Smith', 
+        room: 'Classroom 2A',
+        time: '9:00 AM - 10:00 AM',
+        homework: 'Read Chapter 5 for next week'
+      },
+      { 
+        icon: '🔢', 
+        title: 'Mathematics', 
+        teacher: 'Mr. Johnson', 
+        room: 'Math Lab',
+        time: '10:15 AM - 11:15 AM',
+        homework: 'Complete worksheet 3A'
+      },
+      { 
+        icon: '🔬', 
+        title: 'Science', 
+        teacher: 'Ms. Brown', 
+        room: 'Science Block',
+        time: '11:30 AM - 12:30 PM',
+        homework: 'Project due next week'
+      },
+      { 
+        icon: '🎨', 
+        title: 'Art & Design', 
+        teacher: 'Mr. Lee', 
+        room: 'Art Studio',
+        time: '1:00 PM - 2:00 PM',
+        homework: 'Bring colored pencils'
+      },
+      { 
+        icon: '⚽', 
+        title: 'PE', 
+        teacher: 'Coach Williams', 
+        room: 'Gymnasium',
+        time: '2:15 PM - 3:15 PM',
+        homework: 'Bring sports kit'
+      }
+    ];
+
+    const timetable = [
+      { time: '9:00', subject: '📖 English' },
+      { time: '10:15', subject: '🔢 Mathematics' },
+      { time: '11:30', subject: '🔬 Science' },
+      { time: '12:30', subject: '🍽️ Lunch' },
+      { time: '1:00', subject: '🎨 Art & Design' },
+      { time: '2:15', subject: '⚽ PE' }
+    ];
+
+    function renderSubjects() {
+      const container = document.getElementById('subjectsGrid');
+      
+      container.innerHTML = subjects.map((subject, idx) => `
+        <div class="subject-card">
+          <div class="subject-icon">${subject.icon}</div>
+          <div class="subject-info">
+            <div class="subject-title">${subject.title}</div>
+            <div class="subject-teacher">👨‍🏫 ${subject.teacher}</div>
+            <div class="subject-details">
+              📍 ${subject.room}
+            </div>
+            <div class="subject-time">${subject.time}</div>
+            ${subject.homework ? `<div class="homework-section"><div class="homework-label">📝 Homework:</div><div class="homework-text">${subject.homework}</div></div>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderTimetable() {
+      const container = document.getElementById('timetableContainer');
+      
+      container.innerHTML = timetable.map(item => `
+        <div class="timetable-item">
+          <div class="timetable-time">${item.time}</div>
+          <div class="timetable-subject">${item.subject}</div>
+        </div>
+      `).join('');
+    }
+
+    renderSubjects();
+    renderTimetable();
+  </script>
+</body>
+</html>
