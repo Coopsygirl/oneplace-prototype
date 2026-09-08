@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#ffd8e6" />
+  <meta name="theme-color" content="#4facfe" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="One Place" />
@@ -70,7 +70,16 @@
     </nav>
   </div>
   <script>
-    if (localStorage.getItem('oneplace_loggedIn') === 'parent') { window.location.href = 'parent-dashboard.html'; }
+    // Only redirect to parent dashboard if explicitly logged in as parent
+    if (localStorage.getItem('oneplace_loggedIn') === 'parent') { 
+      window.location.href = 'parent-dashboard.html'; 
+    }
+    
+    // If no login state set, redirect to landing
+    if (!localStorage.getItem('oneplace_loggedIn')) {
+      window.location.href = 'landing.html';
+    }
+    
     const dateLine = document.getElementById('dateLine');
     const now = new Date();
     const opts = { weekday: 'long', month: 'long', day: 'numeric' };
@@ -130,7 +139,7 @@
       if (replies.length === 0) return;
       document.getElementById('messagesFromParent').style.display = 'block';
       const container = document.getElementById('parentMessages');
-      container.innerHTML = replies.map((r, idx) => `<div style="background: #fff0f7; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #ff69b4;"><div style="font-weight: 600; color: #333; margin-bottom: 4px;">💬 Parent replied</div><div style="color: #666; font-size: 14px;">${r.message}</div><div style="font-size: 12px; color: #999; margin-top: 6px;">${r.timestamp}</div></div>`).join('');
+      container.innerHTML = replies.map((r, idx) => `<div style="background: #fff0f7; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #ff69b4;"><div style="font-weight: 600; color: #333; margin-bottom: 4px;">Reply from parent</div><div style="color: #666; font-size: 14px;">${r.message}</div><div style="font-size: 12px; color: #999; margin-top: 6px;">${r.timestamp}</div></div>`).join('');
     }
     renderLater();
     renderParentMessages();
